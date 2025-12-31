@@ -1,0 +1,12 @@
+<?php
+
+namespace {{ namespace }}\Domain\Repositories;
+
+use {{ namespace }}\Domain\Entities\{{ entity }};
+
+interface {{ repository }}
+{
+    public function save({{ entity }} $entity): void;
+
+    public function getById(string $id): ?{{ entity }};
+}

@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }}\Application\Commands;
+
+class {{ command }}
+{
+    public function __construct(
+        {{ properties }}
+    ) {}
+}

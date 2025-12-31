@@ -1,0 +1,26 @@
+<?php
+
+namespace {{ namespace }}\Infrastructure\Persistence\Mappers;
+
+use {{ namespace }}\Domain\Entities\{{ entity }};
+use {{ namespace }}\Infrastructure\Persistence\Models\{{ entity }} as {{ entity }}Model;
+
+final class {{ entity }}Mapper
+{
+    public static function toEntity({{ entity }}Model $model): {{ entity }}
+    {
+        return new {{ entity }}(
+            id: $model->id,
+            // map other fields
+        );
+    }
+
+    public static function toModel({{ entity }} $entity): {{ entity }}Model
+    {
+        $model = new {{ entity }}Model();
+        $model->id = $entity->id();
+        // map other fields
+
+        return $model;
+    }
+}

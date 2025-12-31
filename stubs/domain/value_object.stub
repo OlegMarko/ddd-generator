@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ namespace }}\Domain\ValueObjects;
+
+final class {{ valueObject }}
+{
+    public function __construct(
+        private {{ type }} $value
+    ) {
+        // TODO: validation
+    }
+
+    public function value(): {{ type }}
+    {
+        return $this->value;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->value === $other->value;
+    }
+}

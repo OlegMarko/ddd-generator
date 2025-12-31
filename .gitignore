@@ -1,0 +1,16 @@
+# IDE
+/.idea/
+
+# Composer
+/vendor/
+composer.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+/.phpunit.cache/
+/coverage/
+coverage.xml
+

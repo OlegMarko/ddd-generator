@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }}\Infrastructure\Persistence\Repositories;
+
+use {{ namespace }}\Domain\Repositories\{{ repository }};
+use {{ namespace }}\Domain\Entities\{{ entity }};
+
+class {{ implementation }} implements {{ repository }}
+{
+    public function save({{ entity }} $entity): void
+    {
+        // TODO: persist entity
+    }
+
+    public function getById(string $id): ?{{ entity }}
+    {
+        // TODO: fetch entity
+        return null;
+    }
+}

@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }}\Application\QueryHandlers;
+
+use {{ namespace }}\Application\Queries\{{ query }};
+
+class {{ handler }}
+{
+    public function handle({{ query }} $query)
+    {
+        // TODO: return read model
+    }
+}

@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }}\Domain\Entities;
+
+class {{ entity }}
+{
+    public function __construct()
+    {
+    }
+}

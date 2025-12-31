@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }}\Application\Queries;
+
+class {{ query }}
+{
+    public function __construct(
+        {{ properties }}
+    ) {}
+}

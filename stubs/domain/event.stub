@@ -1,0 +1,11 @@
+<?php
+
+namespace {{ namespace }}\Domain\Events;
+
+final class {{ event }}
+{
+    public function __construct(
+        public readonly string $aggregateId,
+        public readonly \DateTimeImmutable $occurredAt
+    ) {}
+}
