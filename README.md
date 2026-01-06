@@ -3,8 +3,8 @@
 [![CI](https://github.com/OlegMarko/ddd-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/OlegMarko/ddd-generator/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/OlegMarko/ddd-generator/branch/main/graph/badge.svg)](https://codecov.io/gh/OlegMarko/ddd-generator)
 [![Latest Version](https://img.shields.io/packagist/v/fixik/ddd-generator)](https://packagist.org/packages/fixik/ddd-generator)
-[![Packagist Downloads](https://img.shields.io/packagist/dm/fixik/ddd-generator)](https://packagist.org/packages/fixik/ddd-generator)
-[![License](https://img.shields.io/github/license/OlegMarko/ddd-generator)](https://packagist.org/packages/fixik/ddd-generator)
+[![Total Downloads](https://poser.pugx.org/fixik/ddd-generator/downloads)](https://packagist.org/packages/fixik/ddd-generator)
+[![License](https://poser.pugx.org/fixik/ddd-generator/license)](https://packagist.org/packages/fixik/ddd-generator)
 
 
 A production-ready **Laravel package** for generating **Classic DDD structure** with **optional CQRS**, **auto-binding**, and **auto-discovery of modules**.
