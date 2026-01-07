@@ -2,11 +2,12 @@
 
 namespace Fixik\DddGenerator\Generators;
 
+use Fixik\DddGenerator\Support\NamespaceResolver;
 use Fixik\DddGenerator\Support\PathResolver;
 use Fixik\DddGenerator\Support\StubRenderer;
 use Illuminate\Support\Facades\File;
 
-class UseCaseGenerator
+final class UseCaseGenerator
 {
     public function generate(string $module, string $name, ?string $entity = null): void
     {
@@ -17,9 +18,9 @@ class UseCaseGenerator
         $content = StubRenderer::render(
             __DIR__ . '/../../stubs/application/usecase.stub',
             [
-                'module' => $module,
-                'usecase' => $name,
-                'repository' => $repository,
+                'namespace'  => NamespaceResolver::module($module),
+                'usecase'    => $name,
+                'repository' => $repositoryClass ?? null,
             ]
         );
 

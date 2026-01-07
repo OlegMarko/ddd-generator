@@ -3,11 +3,29 @@
 namespace {{ namespace }}\Application\CommandHandlers;
 
 use {{ namespace }}\Application\Commands\{{ command }};
+{{#repository}}
+use {{ namespace }}\Domain\Repositories\{{ repository }};
+{{/repository}}
+{{#entity}}
+use {{ namespace }}\Domain\Entities\{{ entity }};
+{{/entity}}
 
-class {{ handler }}
+final class {{ handler }}
 {
-    public function handle({{ command }} $command): void
+{{#repository}}
+    public function __construct(
+        private {{ repository }} $repository
+    ) {}
+{{/repository}}
+
+    public function __invoke({{ command }} $command): {{ entity }}
     {
-        // TODO: handle command
+        $entity = new {{ entity }}(
+            $command->payload
+        );
+
+        $this->repository->save($entity);
+
+        return $entity;
     }
 }

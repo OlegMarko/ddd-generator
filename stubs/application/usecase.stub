@@ -1,14 +1,18 @@
 <?php
 
 namespace {{ namespace }}\Application\UseCases;
+{{#repository}}
 
 use {{ namespace }}\Domain\Repositories\{{ repository }};
+{{/repository}}
 
 class {{ usecase }}
 {
+{{#repository}}
     public function __construct(
         private {{ repository }} $repository
     ) {}
+{{/repository}}
 
     public function execute(): void
     {

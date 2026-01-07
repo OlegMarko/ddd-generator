@@ -2,129 +2,38 @@
 
 namespace Fixik\DddGenerator\Commands;
 
+use Fixik\DddGenerator\Presets\PresetResolver;
 use Illuminate\Console\Command;
+use InvalidArgumentException;
 
 class MakeDddCommand extends Command
 {
     protected $signature = 'ddd:make
+        {preset : core|api|api-http|crud}
         {module : Module name}
+        {--entity= : Root entity name}';
 
-        {--entity= : Domain Entity}
+    protected $description = 'Generate DDD module using presets';
 
-        {--value-object=* : Domain Value Objects}
-        {--event=* : Domain Events}
-
-        {--listener=* : Event listeners (without Listener suffix)}
-        {--queued-listener : Make listeners queueable}
-
-        {--dto=* : Application DTOs}
-        {--usecase= : Application UseCase}
-
-        {--repository : Generate repository}
-        {--model : Generate Eloquent model}
-        {--mapper : Generate Entity ↔ Model mapper}
-
-        {--cqrs : Enable CQRS (Command / Query)}';
-
-    protected $description = 'Generate full DDD module structure';
-
-    public function handle(): int
+    public function handle(PresetResolver $resolver): int
     {
+        $preset = $this->argument('preset');
         $module = ucfirst($this->argument('module'));
+        $entity = ucfirst($this->option('entity') ?? $module);
 
-        $this->info("Creating DDD module: {$module}");
+        $this->info("Applying preset [$preset] to module [$module]");
 
-        $this->callSilent('ddd:make-module', [
-            'name' => $module,
-            '--cqrs' => $this->option('cqrs'),
-        ]);
+        $resolver->resolve($preset)->generate($module, $entity);
 
-        if ($entity = $this->option('entity')) {
-            $entity = ucfirst($entity);
-            $this->call('ddd:make-entity', [
-                'module' => $module,
-                'name' => $entity,
-            ]);
-        }
-
-        foreach ($this->option('value-object') as $vo) {
-            $this->call('ddd:make-value-object', [
-                'module' => $module,
-                'name' => ucfirst($vo),
-            ]);
-        }
-
-        foreach ($this->option('event') as $event) {
-            $this->call('ddd:make-event', [
-                'module' => $module,
-                'name' => ucfirst($event),
-            ]);
-        }
-
-        foreach ($this->option('listener') as $listener) {
-            foreach ($this->option('event') as $event) {
-                $this->call('ddd:make-listener', [
-                    'module'   => $module,
-                    'event'    => ucfirst($event),
-                    'listener' => ucfirst($listener),
-                    '--queued' => $this->option('queued-listener'),
-                ]);
-            }
-        }
-
-        foreach ($this->option('dto') as $dto) {
-            $this->call('ddd:make-dto', [
-                'module' => $module,
-                'name' => ucfirst($dto),
-            ]);
-        }
-
-        if ($this->option('repository') && $entity) {
-            $this->call('ddd:make-repository', [
-                'module' => $module,
-                'entity' => $entity,
-            ]);
-        }
-
-        if ($this->option('model') && $entity) {
-            $this->call('ddd:make-model', [
-                'module' => $module,
-                'name' => $entity,
-            ]);
-        }
-
-        if ($this->option('mapper') && $entity) {
-            $this->call('ddd:make-mapper', [
-                'module' => $module,
-                'entity' => $entity,
-            ]);
-        }
-
-        if ($useCase = $this->option('usecase')) {
-            $useCase = ucfirst($useCase);
-            $this->call('ddd:make-usecase', [
-                'module' => $module,
-                'name' => $useCase,
-                '--entity' => $entity,
-            ]);
-        }
-
-        if ($this->option('cqrs') && $useCase) {
-            $this->call('ddd:make-command', [
-                'module' => $module,
-                'name' => $useCase,
-            ]);
-
-            if ($entity) {
-                $this->call('ddd:make-query', [
-                    'module' => $module,
-                    'name'   => 'Get' . $entity,
-                ]);
-            }
-        }
+//        try {
+//            $resolver->resolve($preset)->generate($module, $entity);
+//        } catch (InvalidArgumentException $e) {
+//            $this->error($e->getMessage());
+//            return self::FAILURE;
+//        }
 
         $this->newLine();
-        $this->info("DDD module $module generated successfully ✅");
+        $this->info("Preset [$preset] applied successfully ✅");
 
         return self::SUCCESS;
     }

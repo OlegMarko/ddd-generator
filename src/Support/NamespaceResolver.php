@@ -88,5 +88,20 @@ class NamespaceResolver
     {
         return self::module($module) . "\\{$module}ServiceProvider";
     }
+
+    public static function httpController(string $module, string $controller): string
+    {
+        return self::module($module) . "\\Infrastructure\\Http\\Controllers\\$controller";
+    }
+
+    public static function httpRequest(string $module, string $request): string
+    {
+        return self::module($module) . "\\Infrastructure\\Http\\Requests\\$request";
+    }
+
+    public static function httpResource(string $module, string $resource): string
+    {
+        return self::module($module) . "\\Infrastructure\\Http\\Resources\\$resource";
+    }
 }
 

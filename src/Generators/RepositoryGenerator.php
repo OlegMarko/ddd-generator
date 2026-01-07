@@ -6,7 +6,7 @@ use Fixik\DddGenerator\Support\PathResolver;
 use Fixik\DddGenerator\Support\StubRenderer;
 use Illuminate\Support\Facades\File;
 
-class RepositoryGenerator
+final class RepositoryGenerator
 {
     public function __construct(
         private readonly ServiceProviderGenerator $providerGenerator
@@ -14,34 +14,34 @@ class RepositoryGenerator
 
     public function generate(string $module, string $entity): void
     {
-        $repository = "{$entity}Repository";
-        $implementation = "Eloquent{$entity}Repository";
+        $repositoryClass = "{$entity}Repository";
+        $implementationClass = "Eloquent{$entity}Repository";
 
         $this->put(
             $module,
-            "Domain/Repositories/$repository.php",
+            "Domain/Repositories/{$repositoryClass}.php",
             'domain/repository.stub',
             [
-                'entity' => $entity,
-                'repository' => $repository,
+                'entity'     => $entity,
+                'repository' => $repositoryClass,
             ]
         );
 
         $this->put(
             $module,
-            "Infrastructure/Persistence/Repositories/$implementation.php",
+            "Infrastructure/Persistence/Repositories/{$implementationClass}.php",
             'infrastructure/repository.stub',
             [
-                'entity' => $entity,
-                'repository' => $repository,
-                'implementation' => $implementation,
+                'entity'         => $entity,
+                'repository'     => $repositoryClass,
+                'implementation' => $implementationClass,
             ]
         );
 
         $this->providerGenerator->bindRepository(
             $module,
-            $repository,
-            $implementation
+            $repositoryClass,
+            $implementationClass
         );
     }
 
@@ -50,13 +50,19 @@ class RepositoryGenerator
         string $relativePath,
         string $stub,
         array  $data
-    ): void
-    {
-        $path = PathResolver::modulePath($module) . "/$relativePath";
+    ): void {
+        $path = PathResolver::modulePath($module) . "/{$relativePath}";
+
+        if (File::exists($path)) {
+            return;
+        }
 
         $content = StubRenderer::render(
-            __DIR__ . "/../../stubs/$stub",
-            array_merge(['module' => $module], $data)
+            __DIR__ . "/../../stubs/{$stub}",
+            array_merge(
+                ['module' => $module],
+                $data
+            )
         );
 
         File::ensureDirectoryExists(dirname($path));

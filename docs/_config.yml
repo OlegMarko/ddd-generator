@@ -1,0 +1,24 @@
+title: Laravel DDD Generator
+description: Modular DDD & CQRS scaffolding for Laravel
+
+remote_theme: just-the-docs/just-the-docs
+color_scheme: dark
+
+url: https://olegmarko.github.io
+baseurl: /ddd-generator
+
+aux_links:
+  "GitHub":
+    - "https://github.com/OlegMarko/ddd-generator"
+
+mermaid:
+  theme: dark
+
+just_the_docs:
+  search_enabled: true
+  heading_anchors: true
+  back_to_top: true
+  back_to_top_text: "Back to top"
+
+plugins:
+  - jekyll-remote-theme

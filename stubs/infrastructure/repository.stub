@@ -1,11 +1,16 @@
 <?php
 
 namespace {{ namespace }}\Infrastructure\Persistence\Repositories;
+{{#repository}}
 
 use {{ namespace }}\Domain\Repositories\{{ repository }};
+{{/repository}}
 use {{ namespace }}\Domain\Entities\{{ entity }};
 
-class {{ implementation }} implements {{ repository }}
+class {{ implementation }}
+{{#repository}}
+    implements {{ repository }}
+{{/repository}}
 {
     public function save({{ entity }} $entity): void
     {

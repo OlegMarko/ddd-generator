@@ -3,11 +3,21 @@
 namespace {{ namespace }}\Application\QueryHandlers;
 
 use {{ namespace }}\Application\Queries\{{ query }};
+{{#repository}}
+use {{ namespace }}\Domain\Repositories\{{ repository }};
+{{/repository}}
+use {{ namespace }}\Domain\Entities\{{ entity }};
 
-class {{ handler }}
+final class {{ handler }}
 {
-    public function handle({{ query }} $query)
+    {{#repository}}
+        public function __construct(
+            private {{ repository }} $repository
+        ) {}
+    {{/repository}}
+
+    public function __invoke({{ query }} $query): ?{{ entity }}
     {
-        // TODO: return read model
+        return $this->repository->getById($query->id);
     }
 }

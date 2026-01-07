@@ -51,12 +51,10 @@ abstract class TestCase extends Orchestra
 
     protected function cleanup(): void
     {
-        // Clean up generated files
         if (is_dir(app_path('Modules'))) {
             File::deleteDirectory(app_path('Modules'));
         }
-        
-        // Clean up cache files
+
         $cacheFiles = [
             base_path('bootstrap/cache/ddd-modules.php'),
             base_path('bootstrap/cache/ddd-event-listeners.php'),

@@ -5,11 +5,26 @@ namespace Fixik\DddGenerator\Generators;
 use Fixik\DddGenerator\Support\PathResolver;
 use Illuminate\Support\Facades\File;
 
-class ModuleGenerator
+final class ModuleGenerator
 {
-    public function generate(string $name, bool $cqrs): void
+    public function __construct(
+        private readonly ServiceProviderGenerator $serviceProviderGenerator
+    ) {}
+
+    public function generate(string $module, bool $cqrs = false): void
     {
-        $base = PathResolver::modulePath($name);
+        $this->createDirectories($module);
+
+        $this->serviceProviderGenerator->generate($module);
+
+        if ($cqrs) {
+            $this->createCqrsStructure($module);
+        }
+    }
+
+    private function createDirectories(string $module): void
+    {
+        $base = PathResolver::modulePath($module);
 
         $folders = [
             'Domain/Entities',
@@ -24,14 +39,21 @@ class ModuleGenerator
             'Infrastructure/Persistence/Mappers',
         ];
 
-        if ($cqrs) {
-            $folders = array_merge($folders, [
-                'Application/Commands',
-                'Application/CommandHandlers',
-                'Application/Queries',
-                'Application/QueryHandlers',
-            ]);
+        foreach ($folders as $folder) {
+            File::makeDirectory("$base/$folder", 0755, true);
         }
+    }
+
+    private function createCqrsStructure(string $module): void
+    {
+        $base = PathResolver::modulePath($module);
+
+        $folders = [
+            'Application/Commands',
+            'Application/CommandHandlers',
+            'Application/Queries',
+            'Application/QueryHandlers',
+        ];
 
         foreach ($folders as $folder) {
             File::makeDirectory("$base/$folder", 0755, true);

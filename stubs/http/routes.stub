@@ -1,0 +1,9 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Modules\{{ entity }}\Infrastructure\Http\Controllers\{{ entity }}Controller;
+
+Route::prefix('{{ entityPlural }}')->group(function () {
+    Route::post('/', [{{ entity }}Controller::class, 'store']);
+    Route::get('{id}', [{{ entity }}Controller::class, 'show']);
+});

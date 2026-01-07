@@ -2,9 +2,9 @@
 
 namespace {{ namespace }}\Application\Commands;
 
-class {{ command }}
+final class {{ command }}
 {
     public function __construct(
-        {{ properties }}
+        public readonly array $payload
     ) {}
 }

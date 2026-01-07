@@ -1,0 +1,35 @@
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                background: "#0f172a",
+                primaryColor: "#020617",
+                primaryBorderColor: "#38bdf8",
+                primaryTextColor: "#e5e7eb",
+                lineColor: "#64748b",
+                textColor: "#e5e7eb",
+                fontSize: "14px"
+            }
+        });
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+          .node.http rect { stroke: #facc15; fill: #020617; }
+          .node.command rect { stroke: #22c55e; fill: #020617; }
+          .node.query rect { stroke: #60a5fa; fill: #020617; }
+          .node.domain rect { stroke: #a78bfa; fill: #020617; }
+
+          .node.http text,
+          .node.command text,
+          .node.query text,
+          .node.domain text {
+            fill: #e5e7eb;
+            font-weight: 500;
+          }
+        `;
+        document.head.appendChild(style);
+    });
+</script>

@@ -6,7 +6,7 @@ use Fixik\DddGenerator\Support\PathResolver;
 use Fixik\DddGenerator\Support\StubRenderer;
 use Illuminate\Support\Facades\File;
 
-class EntityGenerator
+final class EntityGenerator
 {
     public function generate(string $module, string $name): void
     {

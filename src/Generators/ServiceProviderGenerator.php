@@ -2,80 +2,89 @@
 
 namespace Fixik\DddGenerator\Generators;
 
+use Fixik\DddGenerator\Support\NamespaceResolver;
 use Fixik\DddGenerator\Support\PathResolver;
 use Fixik\DddGenerator\Support\StubRenderer;
 use Illuminate\Support\Facades\File;
 
-class ServiceProviderGenerator
+final class ServiceProviderGenerator
 {
+    private function path(string $module): string
+    {
+        return PathResolver::modulePath($module)
+            . "/{$module}ServiceProvider.php";
+    }
+
+    private function stubPath(): string
+    {
+        return __DIR__ . '/../../stubs/module/service_provider.stub';
+    }
+
+    /**
+     * Generate empty ServiceProvider (no bindings).
+     */
+    public function generate(string $module): void
+    {
+        $path = $this->path($module);
+
+        if (File::exists($path)) {
+            return;
+        }
+
+        File::ensureDirectoryExists(dirname($path));
+
+        $content = StubRenderer::render(
+            $this->stubPath(),
+            [
+                'module'    => $module,
+                'namespace' => NamespaceResolver::module($module),
+                'uses'      => null,
+                'bindings'  => null,
+            ]
+        );
+
+        File::put($path, $content);
+    }
+
     public function bindRepository(
         string $module,
         string $repository,
         string $implementation
-    ): void
-    {
-        $providerPath = PathResolver::modulePath($module) . "/{$module}ServiceProvider.php";
+    ): void {
+        $this->generate($module);
 
-        if (!File::exists($providerPath)) {
-            $this->createProvider(
-                $module,
-                $repository,
-                $implementation,
-                $providerPath
-            );
+        $path = $this->path($module);
+        $existing = File::get($path);
+
+        if (str_contains($existing, "{$repository}::class")) {
             return;
         }
 
-        $this->appendBind(
-            $providerPath,
-            $repository,
-            $implementation
-        );
-    }
+        $repositoryUse = NamespaceResolver::repository($module, $repository);
+        $implementationUse = NamespaceResolver::repositoryImplementation($module, $implementation);
 
-    private function createProvider(
-        string $module,
-        string $repository,
-        string $implementation,
-        string $path
-    ): void
-    {
-        File::put(
-            $path,
-            StubRenderer::render(
-                __DIR__ . '/../../stubs/module/service_provider.stub',
-                compact('module', 'repository', 'implementation')
-            )
-        );
-    }
+        $uses = <<<PHP
+use {$repositoryUse};
+use {$implementationUse};
+PHP;
 
-    private function appendBind(
-        string $path,
-        string $repository,
-        string $implementation
-    ): void
-    {
-        $content = File::get($path);
-        if (str_contains($content, $repository)) {
-            return;
-        }
-
-        $bind = <<< PHP
-
+        $bindings = <<<PHP
         \$this->app->bind(
-            $repository::class,
-            $implementation::class
+            {$repository}::class,
+            {$implementation}::class
         );
 PHP;
 
-        $content = preg_replace(
-            '/public function register\(\): void\s*\{/',
-            "public function register(): void\n    {{$bind}",
-            $content,
-            1
+        $content = StubRenderer::render(
+            $this->stubPath(),
+            [
+                'module'    => $module,
+                'namespace' => NamespaceResolver::module($module),
+                'uses'      => $uses,
+                'bindings'  => $bindings,
+            ]
         );
 
-        File::ensureDirectoryExists(dirname($path));
         File::put($path, $content);
     }
 }

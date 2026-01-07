@@ -2,9 +2,9 @@
 
 namespace {{ namespace }}\Application\Queries;
 
-class {{ query }}
+final class {{ query }}
 {
     public function __construct(
-        {{ properties }}
+        public readonly string $id
     ) {}
 }

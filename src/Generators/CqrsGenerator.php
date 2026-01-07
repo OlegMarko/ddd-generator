@@ -5,11 +5,15 @@ namespace Fixik\DddGenerator\Generators;
 use Fixik\DddGenerator\Support\PathResolver;
 use Fixik\DddGenerator\Support\StubRenderer;
 use Illuminate\Support\Facades\File;
+use InvalidArgumentException;
 
-class CqrsGenerator
+final class CqrsGenerator
 {
-    public function command(string $module, string $name): void
-    {
+    public function command(
+        string $module,
+        string $name,
+        ?string $entity = null
+    ): void {
         $this->generate(
             module: $module,
             stub: 'cqrs/command.stub',
@@ -21,21 +25,36 @@ class CqrsGenerator
         );
     }
 
-    public function commandHandler(string $module, string $name): void
-    {
+    public function commandHandler(
+        string $module,
+        string $name,
+        ?string $entity = null
+    ): void {
+        if (!$entity) {
+            throw new InvalidArgumentException(
+                'Entity is required to generate CommandHandler'
+            );
+        }
+
+        $repository = "{$entity}Repository";
+
         $this->generate(
             module: $module,
             stub: 'cqrs/command_handler.stub',
             path: "Application/CommandHandlers/{$name}Handler.php",
             data: [
-                'command' => "{$name}Command",
-                'handler' => "{$name}Handler",
+                'command'    => "{$name}Command",
+                'handler'    => "{$name}Handler",
+                'entity'     => $entity,
+                'repository' => $repository,
             ]
         );
     }
 
-    public function query(string $module, string $name): void
-    {
+    public function query(
+        string $module,
+        string $name
+    ): void {
         $this->generate(
             module: $module,
             stub: 'cqrs/query.stub',
@@ -47,15 +66,28 @@ class CqrsGenerator
         );
     }
 
-    public function queryHandler(string $module, string $name): void
-    {
+    public function queryHandler(
+        string $module,
+        string $name,
+        ?string $entity = null
+    ): void {
+        if (!$entity) {
+            throw new InvalidArgumentException(
+                'Entity is required to generate QueryHandler'
+            );
+        }
+
+        $repository = "{$entity}Repository";
+
         $this->generate(
             module: $module,
             stub: 'cqrs/query_handler.stub',
             path: "Application/QueryHandlers/{$name}Handler.php",
             data: [
-                'query' => "{$name}Query",
-                'handler' => "{$name}Handler",
+                'query'      => "{$name}Query",
+                'handler'    => "{$name}Handler",
+                'entity'     => $entity,
+                'repository' => $repository,
             ]
         );
     }
@@ -65,13 +97,19 @@ class CqrsGenerator
         string $stub,
         string $path,
         array  $data
-    ): void
-    {
-        $fullPath = PathResolver::modulePath($module) . "/$path";
+    ): void {
+        $fullPath = PathResolver::modulePath($module) . "/{$path}";
+
+        if (File::exists($fullPath)) {
+            return;
+        }
 
         $content = StubRenderer::render(
-            __DIR__ . "/../../stubs/$stub",
-            array_merge(['module' => $module], $data)
+            __DIR__ . "/../../stubs/{$stub}",
+            array_merge(
+                ['module' => $module],
+                $data
+            )
         );
 
         File::ensureDirectoryExists(dirname($fullPath));

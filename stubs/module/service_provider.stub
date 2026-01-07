@@ -3,21 +3,23 @@
 namespace {{ namespace }};
 
 use Illuminate\Support\ServiceProvider;
-use {{ namespace }}\Domain\Repositories\{{ repository }};
-use {{ namespace }}\Infrastructure\Persistence\Repositories\{{ implementation }};
+{{#uses}}
+{{ uses }}
+{{/uses}}
 
 class {{ module }}ServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(
-            {{ repository }}::class,
-            {{ implementation }}::class
-        );
+{{#bindings}}
+{{ bindings }}
+{{/bindings}}
     }
 
     public function boot(): void
     {
-        //
+        if (file_exists(__DIR__.'/Infrastructure/Http/routes.php')) {
+            $this->loadRoutesFrom(__DIR__.'/Infrastructure/Http/routes.php');
+        }
     }
 }

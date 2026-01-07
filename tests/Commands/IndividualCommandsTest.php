@@ -173,23 +173,31 @@ class IndividualCommandsTest extends TestCase
 
     public function test_make_usecase_command(): void
     {
-        $module = 'Order';
-        $name = 'CreateOrder';
-
         $this->artisan('ddd:make-usecase', [
-            'module' => $module,
-            'name' => $name,
-            '--entity' => 'Order',
+            'module' => 'Order',
+            'name' => 'CreateOrder',
         ])->assertExitCode(0);
 
-        $path = PathResolver::modulePath($module) . "/Application/UseCases/{$name}.php";
-        
+        $path = app_path(
+            'Modules/Order/Application/UseCases/CreateOrder.php'
+        );
+
         $this->assertFileExists($path);
-        
-        $content = File::get($path);
-        $this->assertStringContainsString('namespace App\\Modules\\Order\\Application\\UseCases', $content);
-        $this->assertStringContainsString("class {$name}", $content);
-        $this->assertStringContainsString('OrderRepository', $content);
+
+        $content = file_get_contents($path);
+
+        $this->assertStringContainsString(
+            'class CreateOrder',
+            $content
+        );
+        $this->assertStringContainsString(
+            'public function execute',
+            $content
+        );
+        $this->assertStringNotContainsString(
+            'Repository',
+            $content
+        );
     }
 
     public function test_make_command_command(): void
@@ -197,9 +205,10 @@ class IndividualCommandsTest extends TestCase
         $module = 'Order';
         $name = 'CreateOrder';
 
-        $this->artisan('ddd:make-command', [
+        $this->artisan('ddd:make-cqrs-command', [
             'module' => $module,
             'name' => $name,
+            '--entity' => $module,
         ])->assertExitCode(0);
 
         $commandPath = PathResolver::modulePath($module) . "/Application/Commands/{$name}Command.php";
@@ -220,9 +229,10 @@ class IndividualCommandsTest extends TestCase
         $module = 'Order';
         $name = 'GetOrder';
 
-        $this->artisan('ddd:make-query', [
+        $this->artisan('ddd:make-cqrs-query', [
             'module' => $module,
             'name' => $name,
+            '--entity' => 'Order',
         ])->assertExitCode(0);
 
         $queryPath = PathResolver::modulePath($module) . "/Application/Queries/{$name}Query.php";

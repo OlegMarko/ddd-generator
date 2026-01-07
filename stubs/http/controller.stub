@@ -1,0 +1,36 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use {{ requestNamespace }};
+use {{ resourceNamespace }};
+use {{ commandNamespace }};
+use {{ queryNamespace }};
+
+class {{ controller }} extends Controller
+{
+    public function store({{ request }} $request): JsonResponse
+    {
+        $result = dispatch_sync(
+            new {{ command }}($request->validated())
+        );
+
+        return response()->json(
+            new {{ resource }}($result),
+            201
+        );
+    }
+
+    public function show(string $id): JsonResponse
+    {
+        $result = dispatch_sync(
+            new {{ query }}($id)
+        );
+
+        return response()->json(
+            new {{ resource }}($result)
+        );
+    }
+}
