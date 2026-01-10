@@ -9,7 +9,7 @@ use InvalidArgumentException;
 class MakeDddCommand extends Command
 {
     protected $signature = 'ddd:make
-        {preset : core|api|api-http|crud}
+        {preset : domain|cqrs|http|http-cqrs}
         {module : Module name}
         {--entity= : Root entity name}';
 
@@ -23,14 +23,12 @@ class MakeDddCommand extends Command
 
         $this->info("Applying preset [$preset] to module [$module]");
 
-        $resolver->resolve($preset)->generate($module, $entity);
-
-//        try {
-//            $resolver->resolve($preset)->generate($module, $entity);
-//        } catch (InvalidArgumentException $e) {
-//            $this->error($e->getMessage());
-//            return self::FAILURE;
-//        }
+        try {
+            $resolver->resolve($preset)->generate($module, $entity);
+        } catch (InvalidArgumentException $e) {
+            $this->error($e->getMessage());
+            return self::FAILURE;
+        }
 
         $this->newLine();
         $this->info("Preset [$preset] applied successfully ✅");

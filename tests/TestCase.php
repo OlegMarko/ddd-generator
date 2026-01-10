@@ -22,14 +22,14 @@ abstract class TestCase extends Orchestra
         $app['config']->set('ddd.base_path', app_path('Modules'));
         $app['config']->set('ddd.base_namespace', 'App\\Modules');
 
-        $app['config']->set('ddd.auto_discovery.enabled', true);
-        $app['config']->set('ddd.auto_discovery.cache', false); // Disable cache in tests
+        $app['config']->set('ddd.auto_discovery.enabled', false);
+        $app['config']->set('ddd.auto_discovery.cache', false);
         $app['config']->set('ddd.auto_discovery.cache_path', base_path('bootstrap/cache/ddd-modules.php'));
-        
-        $app['config']->set('ddd.event_listeners.cache', false); // Disable cache in tests
+
+        $app['config']->set('ddd.event_listeners.cache', false);
         $app['config']->set('ddd.event_listeners.cache_path', base_path('bootstrap/cache/ddd-event-listeners.php'));
-        
-        $app['config']->set('ddd.class_map.cache', false); // Disable cache in tests
+
+        $app['config']->set('ddd.class_map.cache', false);
         $app['config']->set('ddd.class_map.cache_path', base_path('bootstrap/cache/ddd-class-map.php'));
     }
 

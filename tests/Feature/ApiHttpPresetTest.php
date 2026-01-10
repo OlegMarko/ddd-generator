@@ -10,7 +10,7 @@ class ApiHttpPresetTest extends TestCase
     public function test_it_generates_full_api_http_stack()
     {
         $this->artisan('ddd:make', [
-            'preset' => 'api-http',
+            'preset' => 'http-cqrs',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);

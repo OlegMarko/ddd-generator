@@ -5,6 +5,7 @@ namespace Fixik\DddGenerator;
 use Fixik\DddGenerator\Support\{EventListenerDiscovery,ModuleDiscovery};
 use Fixik\DddGenerator\Commands\{CacheEventListenersCommand,
     CacheModulesCommand,
+    ClearCacheCommand,
     MakeControllerCommand,
     MakeCqrsCommand,
     MakeDddCommand,
@@ -22,6 +23,9 @@ use Fixik\DddGenerator\Commands\{CacheEventListenersCommand,
     MakeRouteCommand,
     MakeUseCaseCommand,
     MakeValueObjectCommand};
+use Fixik\DddGenerator\Listeners\OptimizeListener;
+use Illuminate\Console\Events\CommandFinished;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class DddGeneratorServiceProvider extends ServiceProvider
@@ -39,6 +43,13 @@ class DddGeneratorServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             EventListenerDiscovery::register();
         });
+
+        if (config('ddd.auto_discovery.cache')) {
+            Event::listen(
+                CommandFinished::class,
+                OptimizeListener::class
+            );
+        }
     }
 
     public function register(): void
@@ -46,6 +57,7 @@ class DddGeneratorServiceProvider extends ServiceProvider
         $this->commands([
             CacheEventListenersCommand::class,
             CacheModulesCommand::class,
+            ClearCacheCommand::class,
             MakeControllerCommand::class,
             MakeCqrsCommand::class,
             MakeDddCommand::class,

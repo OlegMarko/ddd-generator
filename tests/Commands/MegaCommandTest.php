@@ -15,7 +15,7 @@ class MegaCommandTest extends TestCase
         $module = 'Order';
 
         $this->artisan('ddd:make', [
-            'preset' => 'core',
+            'preset' => 'domain',
             'module' => $module,
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -31,7 +31,7 @@ class MegaCommandTest extends TestCase
         $module = 'Order';
 
         $this->artisan('ddd:make', [
-            'preset' => 'api-http',
+            'preset' => 'http-cqrs',
             'module' => $module,
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -54,7 +54,7 @@ class MegaCommandTest extends TestCase
         $module = 'Order';
 
         $this->artisan('ddd:make', [
-            'preset' => 'api-http',
+            'preset' => 'http-cqrs',
             'module' => $module,
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -108,7 +108,7 @@ class MegaCommandTest extends TestCase
         $module = 'Order';
 
         $this->artisan('ddd:make', [
-            'preset' => 'core',
+            'preset' => 'domain',
             'module' => $module,
             '--entity' => 'Order',
         ])->assertExitCode(0);

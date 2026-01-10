@@ -5,148 +5,56 @@ nav_order: 4
 
 # Presets
 
-Presets define **what layers and components are generated**
-when creating a module.
-
-They provide opinionated defaults while keeping everything explicit.
+Presets define **what architectural layers are generated** for a module.
+They help you start with the right structure depending on your needs.
 
 ---
 
 ## Available presets
 
-| Preset     | Description |
-|-----------|------------|
-| `core`     | Domain-only module |
-| `api`      | core + CQRS + Repository |
-| `api-http` | api + HTTP layer |
+| Preset | Description |
+|------|-------------|
+| `domain` | Domain-only module (Entities, Events, Repositories) |
+| `http` | Domain + HTTP layer (Controllers, Requests, Routes) |
+| `cqrs` | Domain + CQRS (Commands, Queries, Handlers) |
+| `http-cqrs` | Domain + CQRS + HTTP |
 
 ---
 
-## core preset
+## Usage examples
 
-### Description
-Minimal domain module for modeling business logic.
-
-### Generates
-- Domain Entity
-- Module ServiceProvider
-
-### CLI example
+### Domain-only module
 
 ```bash
-php artisan ddd:make core Order --entity=Order
-```
-
-### Result
-
-```
-Modules/Order
-├── Domain
-│   └── Entities/Order.php
-└── OrderServiceProvider.php
+php artisan ddd:make domain Order
 ```
 
 ---
 
-## api preset
-
-### Description
-Adds Application layer and CQRS.
-
-### Generates
-- core preset
-- Commands & Queries
-- CommandHandlers & QueryHandlers
-- Repository interface and implementation
-
-### CLI example
+### HTTP module
 
 ```bash
-php artisan ddd:make api Order --entity=Order
-```
-
-### Result
-
-```
-Modules/Order
-├── Domain
-│   ├── Entities
-│   └── Repositories
-├── Application
-│   ├── Commands
-│   ├── CommandHandlers
-│   ├── Queries
-│   └── QueryHandlers
-└── Infrastructure
-    └── Persistence
+php artisan ddd:make http Order
 ```
 
 ---
 
-## api-http preset
-
-### Description
-Generates a full REST-ready HTTP API.
-
-### Generates
-- api preset
-- HTTP Controllers
-- Form Requests
-- API Resources
-- Module routes
-
-### CLI example
+### CQRS module
 
 ```bash
-php artisan ddd:make api-http Order --entity=Order
-```
-
-### Result
-
-```
-Modules/Order
-├── Domain
-├── Application
-├── Infrastructure
-│   ├── Persistence
-│   └── Http
-│       ├── Controllers
-│       ├── Requests
-│       ├── Resources
-│       └── routes.php
-└── OrderServiceProvider.php
+php artisan ddd:make cqrs Order
 ```
 
 ---
 
-## Preset guarantees
+### HTTP + CQRS module
 
-- Presets are idempotent
-- Safe to re-run multiple times
-- Never overwrite existing code
-- Entity must be explicitly provided
-
----
-
-## Custom presets
-
-You can create your own presets by implementing:
-
-```php
-Fixik\DddGenerator\Presets\PresetInterface
+```bash
+php artisan ddd:make http-cqrs Order
 ```
 
-This allows:
-- Custom module templates
-- Team-specific architecture
-- Company standards enforcement
-
 ---
 
-## When to use which preset
+## How to choose a preset
 
-| Use case | Preset |
-|--------|--------|
-| Domain modeling | `core` |
-| Internal services | `api` |
-| Public REST API | `api-http` |
+Which preset should I choose? [Presets](which-preset.md)

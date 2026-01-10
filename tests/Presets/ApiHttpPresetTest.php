@@ -11,7 +11,7 @@ class ApiHttpPresetTest extends TestCase
     public function test_api_http_preset_generates_full_stack(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'api-http',
+            'preset' => 'http-cqrs',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -50,7 +50,7 @@ class ApiHttpPresetTest extends TestCase
     public function test_usecase_and_commands_do_not_depend_on_repository(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'api-http',
+            'preset' => 'http-cqrs',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -70,7 +70,7 @@ class ApiHttpPresetTest extends TestCase
     public function test_handlers_depend_on_repository(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'api-http',
+            'preset' => 'http-cqrs',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);

@@ -10,7 +10,7 @@ class CorePresetTest extends TestCase
     public function test_core_preset_generates_domain_only(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'core',
+            'preset' => 'domain',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);

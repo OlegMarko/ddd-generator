@@ -16,12 +16,20 @@ class CacheEventListenersCommand extends Command
 
         $this->info('Event listeners cache rebuilt');
 
+        if (app()->environment(['local', 'testing'])) {
+            $this->warn('⚠️ This command is intended for PRODUCTION use only.');
+            $this->warn('⚠️ Current environment: ' . app()->environment());
+            $this->newLine();
+        }
+
         foreach ($map as $event => $listeners) {
             $this->line($event);
             foreach ($listeners as $listener) {
                 $this->line("  - $listener");
             }
         }
+
+        $this->info('DDD event -> listeners cache generated successfully.');
 
         return self::SUCCESS;
     }

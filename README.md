@@ -21,8 +21,8 @@ A Laravel package for generating **Domain-Driven Design (DDD)** modules with
 - CQRS (Commands / Queries / Handlers)
 - HTTP API generation (Controllers, Requests, Resources, Routes)
 - Idempotent generators (safe to re-run)
-- Preset-based generation (`core`, `api`, `api-http`)
-- Custom base namespace & path
+- Preset-based generation (`domain`, `cqrs`, `http-cqrs`, `http`)
+- Custom base namespace and path
 - Fully covered by tests
 
 ---
@@ -38,7 +38,7 @@ composer require fixik/ddd-generator --dev
 ### Generate API HTTP module
 
 ```bash
-php artisan ddd:make api-http Order --entity=Order
+php artisan ddd:make http-cqrs Order --entity=Order
 ```
 
 This will generate:
@@ -49,11 +49,12 @@ This will generate:
 - Module ServiceProvider
 
 ## 📦 Presets
-| Preset     | Description                                     |
-| ---------- | ----------------------------------------------- |
-| `core`     | Domain only (Entity, ServiceProvider)           |
-| `api`      | core + CQRS + Repository                        |
-| `api-http` | api + HTTP layer (Controller, Routes, Requests) |
+| Preset        | Description                                      |
+|---------------|--------------------------------------------------|
+| `domain`      | Domain only (Entities, Events, Repositories)     |
+| `cqrs`        | Domain + CQRS (Commands, Queries, Handlers)      |
+| `http`        | Domain + HTTP (Controllers, Requests, Routes)    |
+| `http-cqrs`   | Domain + CQRS + HTTP                             |
 
 ## 📚 Documentation
 
@@ -75,6 +76,24 @@ This package enforces explicit architecture:
 - No global routes
 - No infrastructure leaks into domain
 - Designed for long-living Laravel applications.
+
+## ⚡ Performance & Caching
+
+The generator provides optional cache commands for large, modular applications:
+
+- `php artisan ddd:modules-cache`
+- `php artisan ddd:event-listeners-cache`
+- `php artisan ddd:cache-clear`
+
+These commands are intended **ONLY for production environments**.
+
+They should NOT be used in:
+- local development
+- automated tests
+- CI pipelines
+
+They work similarly to Laravel's `route:cache` and `event:cache`
+and significantly reduce bootstrapping overhead in large projects.
 
 ## 📄 License
 

@@ -61,7 +61,7 @@ php artisan list | grep ddd
 ## First module
 
 ```bash
-php artisan ddd:make api-http Order --entity=Order
+php artisan ddd:make http-cqrs Order --entity=Order
 ```
 
 ## Next steps
