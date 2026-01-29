@@ -9,9 +9,10 @@ final class ApiHttpPreset implements PresetInterface
     public function generate(string $module, string $entity): void
     {
         Artisan::call('ddd:make', [
-            'preset' => 'cqrs',
+            'preset' => 'domain',
             'module' => $module,
             '--entity' => $entity,
+            '--style' => 'cqrs',
         ]);
 
         Artisan::call('ddd:make-controller', [

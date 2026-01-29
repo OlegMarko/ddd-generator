@@ -15,9 +15,9 @@ They help you start with the right structure depending on your needs.
 | Preset | Description |
 |------|-------------|
 | `domain` | Domain-only module (Entities, Events, Repositories) |
-| `http` | Domain + HTTP layer (Controllers, Requests, Routes) |
-| `cqrs` | Domain + CQRS (Commands, Queries, Handlers) |
-| `http-cqrs` | Domain + CQRS + HTTP |
+| `domain` + `--style=cqrs` | Domain + CQRS (Commands, Queries, Handlers) |
+| `http-crud` | Domain + HTTP CRUD (Controllers, Requests, Routes) |
+| `http-api` | Domain + CQRS + HTTP API |
 
 ---
 
@@ -31,26 +31,26 @@ php artisan ddd:make domain Order
 
 ---
 
-### HTTP module
+### Domain + CQRS
 
 ```bash
-php artisan ddd:make http Order
+php artisan ddd:make domain Order --style=cqrs
 ```
 
 ---
 
-### CQRS module
+### HTTP CRUD module
 
 ```bash
-php artisan ddd:make cqrs Order
+php artisan ddd:make http-crud Order
 ```
 
 ---
 
-### HTTP + CQRS module
+### HTTP API module
 
 ```bash
-php artisan ddd:make http-cqrs Order
+php artisan ddd:make http-api Order --style=cqrs
 ```
 
 ---

@@ -9,9 +9,10 @@ use InvalidArgumentException;
 class MakeDddCommand extends Command
 {
     protected $signature = 'ddd:make
-        {preset : domain|cqrs|http|http-cqrs}
+        {preset : domain|http-crud|http-api}
         {module : Module name}
-        {--entity= : Root entity name}';
+        {--entity= : Root entity name}
+        {--style= : Generation style (e.g. cqrs)}';
 
     protected $description = 'Generate DDD module using presets';
 
@@ -20,11 +21,16 @@ class MakeDddCommand extends Command
         $preset = $this->argument('preset');
         $module = ucfirst($this->argument('module'));
         $entity = ucfirst($this->option('entity') ?? $module);
+        $style = $this->option('style');
 
-        $this->info("Applying preset [$preset] to module [$module]");
+        if ($style) {
+            $this->info("Applying preset [$preset] with style [$style] to module [$module]");
+        } else {
+            $this->info("Applying preset [$preset] to module [$module]");
+        }
 
         try {
-            $resolver->resolve($preset)->generate($module, $entity);
+            $resolver->resolve($preset, $style)->generate($module, $entity);
         } catch (InvalidArgumentException $e) {
             $this->error($e->getMessage());
             return self::FAILURE;

@@ -24,7 +24,7 @@ using **Domain-Driven Design (DDD)** and **CQRS**.
 
 ```bash
 composer require fixik/ddd-generator --dev
-php artisan ddd:make http-cqrs Order --entity=Order
+php artisan ddd:make http-api Order --entity=Order --style=cqrs
 ```
 
 ## Next steps

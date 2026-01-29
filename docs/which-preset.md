@@ -10,8 +10,8 @@ flowchart TD
     A[Start] --> B{Need HTTP?}
     B -- No --> C{Need CQRS?}
     C -- No --> D[domain]
-    C -- Yes --> E[cqrs]
-    B -- Yes --> F{Need CQRS?}
-    F -- No --> G[http]
-    F -- Yes --> H[http-cqrs]
+    C -- Yes --> E[domain + --style=cqrs]
+    B -- Yes --> F{Need CRUD?}
+    F -- Yes --> G[http-crud]
+    F -- No --> H[http-api]
 ```

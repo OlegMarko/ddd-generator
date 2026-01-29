@@ -11,9 +11,10 @@ class ApiHttpPresetTest extends TestCase
     public function test_api_http_preset_generates_full_stack(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'http-cqrs',
+            'preset' => 'http-api',
             'module' => 'Order',
             '--entity' => 'Order',
+            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath('Order');
@@ -50,9 +51,10 @@ class ApiHttpPresetTest extends TestCase
     public function test_usecase_and_commands_do_not_depend_on_repository(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'http-cqrs',
+            'preset' => 'http-api',
             'module' => 'Order',
             '--entity' => 'Order',
+            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath('Order');
@@ -70,9 +72,10 @@ class ApiHttpPresetTest extends TestCase
     public function test_handlers_depend_on_repository(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'http-cqrs',
+            'preset' => 'http-api',
             'module' => 'Order',
             '--entity' => 'Order',
+            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath('Order');

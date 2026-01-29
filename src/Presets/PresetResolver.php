@@ -6,13 +6,19 @@ use InvalidArgumentException;
 
 final class PresetResolver
 {
-    public function resolve(string $preset): PresetInterface
+    public function resolve(string $preset, ?string $style = null): PresetInterface
     {
+        $preset = strtolower($preset);
+        $style = $style !== null ? strtolower($style) : null;
+
+        if ($style !== null && $style !== 'cqrs') {
+            throw new InvalidArgumentException("Unknown style [$style]");
+        }
+
         return match ($preset) {
-            'cqrs'  => new ApiPreset(),
-            'http-cqrs' => new ApiHttpPreset(),
-            'domain' => new CorePreset(),
-            'http' => new CrudPreset(),
+            'domain' => $style === 'cqrs' ? new ApiPreset() : new CorePreset(),
+            'http-api' => new ApiHttpPreset(),
+            'http-crud' => new CrudPreset(),
             default => throw new InvalidArgumentException(
                 "Unknown preset [$preset]"
             ),

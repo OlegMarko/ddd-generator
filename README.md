@@ -21,7 +21,7 @@ A Laravel package for generating **Domain-Driven Design (DDD)** modules with
 - CQRS (Commands / Queries / Handlers)
 - HTTP API generation (Controllers, Requests, Resources, Routes)
 - Idempotent generators (safe to re-run)
-- Preset-based generation (`domain`, `cqrs`, `http-cqrs`, `http`)
+- Preset-based generation (`domain`, `http-crud`, `http-api`, `--style=cqrs`)
 - Custom base namespace and path
 - Fully covered by tests
 
@@ -38,7 +38,7 @@ composer require fixik/ddd-generator --dev
 ### Generate API HTTP module
 
 ```bash
-php artisan ddd:make http-cqrs Order --entity=Order
+php artisan ddd:make http-api Order --entity=Order --style=cqrs
 ```
 
 This will generate:
@@ -52,9 +52,9 @@ This will generate:
 | Preset        | Description                                      |
 |---------------|--------------------------------------------------|
 | `domain`      | Domain only (Entities, Events, Repositories)     |
-| `cqrs`        | Domain + CQRS (Commands, Queries, Handlers)      |
-| `http`        | Domain + HTTP (Controllers, Requests, Routes)    |
-| `http-cqrs`   | Domain + CQRS + HTTP                             |
+| `domain` + `--style=cqrs` | Domain + CQRS (Commands, Queries, Handlers) |
+| `http-crud`   | Domain + HTTP CRUD (Controllers, Requests, Routes) |
+| `http-api`    | Domain + CQRS + HTTP API                         |
 
 ## 📚 Documentation
 

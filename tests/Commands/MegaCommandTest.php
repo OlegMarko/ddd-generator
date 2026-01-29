@@ -31,9 +31,10 @@ class MegaCommandTest extends TestCase
         $module = 'Order';
 
         $this->artisan('ddd:make', [
-            'preset' => 'http-cqrs',
+            'preset' => 'http-api',
             'module' => $module,
             '--entity' => 'Order',
+            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath($module);
@@ -54,9 +55,10 @@ class MegaCommandTest extends TestCase
         $module = 'Order';
 
         $this->artisan('ddd:make', [
-            'preset' => 'http-cqrs',
+            'preset' => 'http-api',
             'module' => $module,
             '--entity' => 'Order',
+            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath($module);
