@@ -34,7 +34,7 @@ class DddGeneratorServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/ddd.php' => config_path('ddd.php'),
-        ], 'config');
+        ], 'ddd-config');
 
         if (config('ddd.auto_discovery.enabled')) {
             ModuleDiscovery::discover($this->app);
