@@ -4,38 +4,21 @@ namespace Fixik\DddGenerator\Presets;
 
 use Illuminate\Support\Facades\Artisan;
 
-final class CrudPreset implements PresetInterface
+final class ApiHttpCqrsPreset implements PresetInterface
 {
     public function generate(string $module, string $entity): void
     {
-        Artisan::call('ddd:make-module', [
-            'name' => $module,
-        ]);
-
-        Artisan::call('ddd:make-entity', [
+        Artisan::call('ddd:make', [
+            'preset' => 'domain',
             'module' => $module,
-            'name' => $entity,
-        ]);
-
-        Artisan::call('ddd:make-repository', [
-            'module' => $module,
-            'entity' => $entity,
-        ]);
-
-        Artisan::call('ddd:make-model', [
-            'module' => $module,
-            'name' => $entity,
-        ]);
-
-        Artisan::call('ddd:make-mapper', [
-            'module' => $module,
-            'entity' => $entity,
+            '--entity' => $entity,
+            '--style' => 'cqrs',
         ]);
 
         Artisan::call('ddd:make-controller', [
             'module' => $module,
             'name' => $entity . 'Controller',
-            '--style' => 'crud',
+            '--style' => 'cqrs',
         ]);
 
         Artisan::call('ddd:make-request', [
@@ -51,7 +34,7 @@ final class CrudPreset implements PresetInterface
         Artisan::call('ddd:make-route', [
             'module' => $module,
             'entity' => $entity,
-            '--style' => 'crud',
+            '--style' => 'api',
         ]);
     }
 }

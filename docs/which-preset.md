@@ -13,5 +13,7 @@ flowchart TD
     C -- Yes --> E[domain + --style=cqrs]
     B -- Yes --> F{Need CRUD?}
     F -- Yes --> G[http-crud]
-    F -- No --> H[http-api]
+    F -- No --> H{Need CQRS?}
+    H -- No --> I[http-api]
+    H -- Yes --> J[http-api + --style=cqrs]
 ```

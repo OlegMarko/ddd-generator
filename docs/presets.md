@@ -17,7 +17,8 @@ They help you start with the right structure depending on your needs.
 | `domain` | Domain-only module (Entities, Events, Repositories) |
 | `domain` + `--style=cqrs` | Domain + CQRS (Commands, Queries, Handlers) |
 | `http-crud` | Domain + HTTP CRUD (Controllers, Requests, Routes) |
-| `http-api` | Domain + CQRS + HTTP API |
+| `http-api` | Domain + HTTP API (Controllers, Requests, Routes) |
+| `http-api` + `--style=cqrs` | Domain + CQRS + HTTP API |
 
 ---
 
@@ -48,6 +49,14 @@ php artisan ddd:make http-crud Order
 ---
 
 ### HTTP API module
+
+```bash
+php artisan ddd:make http-api Order
+```
+
+---
+
+### HTTP API + CQRS
 
 ```bash
 php artisan ddd:make http-api Order --style=cqrs

@@ -13,7 +13,6 @@ class ApiHttpPresetTest extends TestCase
             'preset' => 'http-api',
             'module' => 'Order',
             '--entity' => 'Order',
-            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $this->assertFileExists(

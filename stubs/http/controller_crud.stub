@@ -1,0 +1,76 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use {{ requestNamespace }};
+use {{ resourceNamespace }};
+use {{ repositoryNamespace }};
+use {{ entityNamespace }};
+
+class {{ controller }} extends Controller
+{
+    public function __construct(
+        private {{ repository }} $repository
+    ) {}
+
+    public function store({{ request }} $request): JsonResponse
+    {
+        $entity = new {{ entity }}();
+        // TODO: map request data to entity
+        $this->repository->save($entity);
+
+        return response()->json(
+            new {{ resource }}($entity),
+            201
+        );
+    }
+
+    public function index(): JsonResponse
+    {
+        // TODO: implement pagination/filtering
+        return response()->json([]);
+    }
+
+    public function show(string $id): JsonResponse
+    {
+        $entity = $this->repository->getById($id);
+
+        if (!$entity) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+
+        return response()->json(
+            new {{ resource }}($entity)
+        );
+    }
+
+    public function update(string $id, {{ request }} $request): JsonResponse
+    {
+        $entity = $this->repository->getById($id);
+
+        if (!$entity) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+
+        // TODO: map request data to entity
+        $this->repository->save($entity);
+
+        return response()->json(
+            new {{ resource }}($entity)
+        );
+    }
+
+    public function destroy(string $id): JsonResponse
+    {
+        $entity = $this->repository->getById($id);
+
+        if (!$entity) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+
+        // TODO: implement delete
+        return response()->json(null, 204);
+    }
+}

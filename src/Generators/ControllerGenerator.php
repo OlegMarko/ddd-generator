@@ -11,9 +11,15 @@ final class ControllerGenerator
         protected Filesystem $files,
     ) {}
 
-    public function generate(string $module, string $name, ?string $entity = null): void
+    public function generate(
+        string $module,
+        string $name,
+        ?string $entity = null,
+        ?string $style = null
+    ): void
     {
         $entity ??= str_replace('Controller', '', $name);
+        $style = $style !== null ? strtolower($style) : 'api';
 
         $path = $this->path($module, $name);
 
@@ -25,7 +31,7 @@ final class ControllerGenerator
 
         $this->files->put(
             $path,
-            $this->stub($module, $name, $entity)
+            $this->stub($module, $name, $entity, $style)
         );
     }
 
@@ -36,8 +42,73 @@ final class ControllerGenerator
         );
     }
 
-    protected function stub(string $module, string $controller, string $entity): string
+    protected function stub(
+        string $module,
+        string $controller,
+        string $entity,
+        string $style
+    ): string
     {
+        if ($style === 'crud') {
+            return str_replace(
+                [
+                    '{{ namespace }}',
+                    '{{ controller }}',
+                    '{{ entity }}',
+                    '{{ requestNamespace }}',
+                    '{{ resourceNamespace }}',
+                    '{{ repositoryNamespace }}',
+                    '{{ entityNamespace }}',
+                    '{{ request }}',
+                    '{{ resource }}',
+                    '{{ repository }}',
+                ],
+                [
+                    NamespaceResolver::httpController($module, $controller),
+                    $controller,
+                    $entity,
+                    NamespaceResolver::httpRequest($module, 'Store'.$entity.'Request'),
+                    NamespaceResolver::httpResource($module, $entity.'Resource'),
+                    NamespaceResolver::repository($module, $entity.'Repository'),
+                    NamespaceResolver::entity($module, $entity),
+                    'Store'.$entity.'Request',
+                    $entity.'Resource',
+                    $entity.'Repository',
+                ],
+                file_get_contents(__DIR__.'/../../stubs/http/controller_crud.stub')
+            );
+        }
+
+        if ($style === 'api') {
+            return str_replace(
+                [
+                    '{{ namespace }}',
+                    '{{ controller }}',
+                    '{{ entity }}',
+                    '{{ requestNamespace }}',
+                    '{{ resourceNamespace }}',
+                    '{{ repositoryNamespace }}',
+                    '{{ entityNamespace }}',
+                    '{{ request }}',
+                    '{{ resource }}',
+                    '{{ repository }}',
+                ],
+                [
+                    NamespaceResolver::httpController($module, $controller),
+                    $controller,
+                    $entity,
+                    NamespaceResolver::httpRequest($module, 'Store'.$entity.'Request'),
+                    NamespaceResolver::httpResource($module, $entity.'Resource'),
+                    NamespaceResolver::repository($module, $entity.'Repository'),
+                    NamespaceResolver::entity($module, $entity),
+                    'Store'.$entity.'Request',
+                    $entity.'Resource',
+                    $entity.'Repository',
+                ],
+                file_get_contents(__DIR__.'/../../stubs/http/controller_api.stub')
+            );
+        }
+
         return str_replace(
             [
                 '{{ namespace }}',

@@ -1,0 +1,12 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Modules\{{ entity }}\Infrastructure\Http\Controllers\{{ entity }}Controller;
+
+Route::prefix('{{ entityPlural }}')->group(function () {
+    Route::get('/', [{{ entity }}Controller::class, 'index']);
+    Route::post('/', [{{ entity }}Controller::class, 'store']);
+    Route::get('{id}', [{{ entity }}Controller::class, 'show']);
+    Route::put('{id}', [{{ entity }}Controller::class, 'update']);
+    Route::delete('{id}', [{{ entity }}Controller::class, 'destroy']);
+});

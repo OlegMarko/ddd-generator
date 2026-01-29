@@ -8,16 +8,34 @@ final class ApiHttpPreset implements PresetInterface
 {
     public function generate(string $module, string $entity): void
     {
-        Artisan::call('ddd:make', [
-            'preset' => 'domain',
+        Artisan::call('ddd:make-module', [
+            'name' => $module,
+        ]);
+
+        Artisan::call('ddd:make-entity', [
             'module' => $module,
-            '--entity' => $entity,
-            '--style' => 'cqrs',
+            'name' => $entity,
+        ]);
+
+        Artisan::call('ddd:make-repository', [
+            'module' => $module,
+            'entity' => $entity,
+        ]);
+
+        Artisan::call('ddd:make-model', [
+            'module' => $module,
+            'name' => $entity,
+        ]);
+
+        Artisan::call('ddd:make-mapper', [
+            'module' => $module,
+            'entity' => $entity,
         ]);
 
         Artisan::call('ddd:make-controller', [
             'module' => $module,
             'name' => $entity . 'Controller',
+            '--style' => 'api',
         ]);
 
         Artisan::call('ddd:make-request', [
@@ -33,11 +51,7 @@ final class ApiHttpPreset implements PresetInterface
         Artisan::call('ddd:make-route', [
             'module' => $module,
             'entity' => $entity,
-        ]);
-
-        Artisan::call('ddd:make-route', [
-            'module' => $module,
-            'entity' => $entity,
+            '--style' => 'api',
         ]);
     }
 }

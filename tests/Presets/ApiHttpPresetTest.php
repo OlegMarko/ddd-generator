@@ -14,20 +14,19 @@ class ApiHttpPresetTest extends TestCase
             'preset' => 'http-api',
             'module' => 'Order',
             '--entity' => 'Order',
-            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath('Order');
 
-        $this->assertFileExists("{$basePath}/Application/Commands/CreateOrderCommand.php");
-        $this->assertFileExists("{$basePath}/Application/CommandHandlers/CreateOrderHandler.php");
-
-        $this->assertFileExists("{$basePath}/Application/Queries/GetOrderQuery.php");
-        $this->assertFileExists("{$basePath}/Application/QueryHandlers/GetOrderHandler.php");
-
         $this->assertFileExists("{$basePath}/Domain/Repositories/OrderRepository.php");
         $this->assertFileExists(
             "{$basePath}/Infrastructure/Persistence/Repositories/EloquentOrderRepository.php"
+        );
+        $this->assertFileExists(
+            "{$basePath}/Infrastructure/Persistence/Models/Order.php"
+        );
+        $this->assertFileExists(
+            "{$basePath}/Infrastructure/Persistence/Mappers/OrderMapper.php"
         );
 
         $this->assertFileExists(
@@ -48,28 +47,31 @@ class ApiHttpPresetTest extends TestCase
         );
     }
 
-    public function test_usecase_and_commands_do_not_depend_on_repository(): void
+    public function test_api_http_preset_does_not_generate_cqrs_files(): void
     {
         $this->artisan('ddd:make', [
             'preset' => 'http-api',
             'module' => 'Order',
             '--entity' => 'Order',
-            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath('Order');
 
-        $command = File::get(
+        $this->assertFileDoesNotExist(
             "{$basePath}/Application/Commands/CreateOrderCommand.php"
         );
-
-        $this->assertStringNotContainsString(
-            'Repository',
-            $command
+        $this->assertFileDoesNotExist(
+            "{$basePath}/Application/CommandHandlers/CreateOrderHandler.php"
+        );
+        $this->assertFileDoesNotExist(
+            "{$basePath}/Application/Queries/GetOrderQuery.php"
+        );
+        $this->assertFileDoesNotExist(
+            "{$basePath}/Application/QueryHandlers/GetOrderHandler.php"
         );
     }
 
-    public function test_handlers_depend_on_repository(): void
+    public function test_api_http_preset_with_cqrs_generates_full_stack(): void
     {
         $this->artisan('ddd:make', [
             'preset' => 'http-api',
@@ -79,6 +81,11 @@ class ApiHttpPresetTest extends TestCase
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath('Order');
+
+        $this->assertFileExists("{$basePath}/Application/Commands/CreateOrderCommand.php");
+        $this->assertFileExists("{$basePath}/Application/CommandHandlers/CreateOrderHandler.php");
+        $this->assertFileExists("{$basePath}/Application/Queries/GetOrderQuery.php");
+        $this->assertFileExists("{$basePath}/Application/QueryHandlers/GetOrderHandler.php");
 
         $handler = File::get(
             "{$basePath}/Application/CommandHandlers/CreateOrderHandler.php"

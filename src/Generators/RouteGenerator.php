@@ -10,7 +10,7 @@ class RouteGenerator
         protected Filesystem $files,
     ) {}
 
-    public function generate(string $module, string $entity): void
+    public function generate(string $module, string $entity, ?string $style = null): void
     {
         $path = $this->path($module);
 
@@ -22,7 +22,7 @@ class RouteGenerator
 
         $this->files->put(
             $path,
-            $this->stub($module, $entity)
+            $this->stub($module, $entity, $style)
         );
     }
 
@@ -33,15 +33,20 @@ class RouteGenerator
         );
     }
 
-    protected function stub(string $module, string $entity): string
+    protected function stub(string $module, string $entity, ?string $style): string
     {
+        $style = $style !== null ? strtolower($style) : 'api';
+        $stubPath = $style === 'crud'
+            ? __DIR__.'/../../stubs/http/routes_crud.stub'
+            : __DIR__.'/../../stubs/http/routes.stub';
+
         return str_replace(
             ['{{ entity }}', '{{ entityPlural }}'],
             [
                 $entity,
                 strtolower($entity) . 's',
             ],
-            file_get_contents(__DIR__.'/../../stubs/http/routes.stub')
+            file_get_contents($stubPath)
         );
     }
 }

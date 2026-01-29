@@ -34,6 +34,24 @@ class MegaCommandTest extends TestCase
             'preset' => 'http-api',
             'module' => $module,
             '--entity' => 'Order',
+        ])->assertExitCode(0);
+
+        $basePath = PathResolver::modulePath($module);
+
+        $this->assertFileExists("{$basePath}/Infrastructure/Http/Controllers/OrderController.php");
+        $this->assertFileExists("{$basePath}/Infrastructure/Http/Requests/StoreOrderRequest.php");
+        $this->assertFileExists("{$basePath}/Infrastructure/Http/Resources/OrderResource.php");
+        $this->assertFileExists("{$basePath}/Infrastructure/Http/routes.php");
+    }
+
+    public function test_it_generates_api_http_cqrs_stack(): void
+    {
+        $module = 'Order';
+
+        $this->artisan('ddd:make', [
+            'preset' => 'http-api',
+            'module' => $module,
+            '--entity' => 'Order',
             '--style' => 'cqrs',
         ])->assertExitCode(0);
 
@@ -43,11 +61,6 @@ class MegaCommandTest extends TestCase
         $this->assertFileExists("{$basePath}/Application/CommandHandlers/CreateOrderHandler.php");
         $this->assertFileExists("{$basePath}/Application/Queries/GetOrderQuery.php");
         $this->assertFileExists("{$basePath}/Application/QueryHandlers/GetOrderHandler.php");
-
-        $this->assertFileExists("{$basePath}/Infrastructure/Http/Controllers/OrderController.php");
-        $this->assertFileExists("{$basePath}/Infrastructure/Http/Requests/StoreOrderRequest.php");
-        $this->assertFileExists("{$basePath}/Infrastructure/Http/Resources/OrderResource.php");
-        $this->assertFileExists("{$basePath}/Infrastructure/Http/routes.php");
     }
 
     public function test_generated_files_have_correct_namespaces(): void
@@ -58,7 +71,6 @@ class MegaCommandTest extends TestCase
             'preset' => 'http-api',
             'module' => $module,
             '--entity' => 'Order',
-            '--style' => 'cqrs',
         ])->assertExitCode(0);
 
         $basePath = PathResolver::modulePath($module);

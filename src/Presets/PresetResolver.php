@@ -15,9 +15,15 @@ final class PresetResolver
             throw new InvalidArgumentException("Unknown style [$style]");
         }
 
+        if ($style === 'cqrs' && $preset === 'http-crud') {
+            throw new InvalidArgumentException(
+                "Style [$style] is not supported for preset [$preset]"
+            );
+        }
+
         return match ($preset) {
             'domain' => $style === 'cqrs' ? new ApiPreset() : new CorePreset(),
-            'http-api' => new ApiHttpPreset(),
+            'http-api' => $style === 'cqrs' ? new ApiHttpCqrsPreset() : new ApiHttpPreset(),
             'http-crud' => new CrudPreset(),
             default => throw new InvalidArgumentException(
                 "Unknown preset [$preset]"
