@@ -28,7 +28,7 @@ final class ResourceGenerator
         $this->files->put(
             $path,
             $this->stubs->render(__DIR__ . '/../../stubs/http/resource.stub', [
-                'namespace' => NamespaceResolver::httpResource($module, $name),
+                'namespace' => NamespaceResolver::httpResourceNamespace($module),
                 'resource'  => $name,
             ])
         );

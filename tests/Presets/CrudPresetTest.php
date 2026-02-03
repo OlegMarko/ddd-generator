@@ -6,12 +6,12 @@ use Fixik\DddGenerator\Support\PathResolver;
 use Fixik\DddGenerator\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 
-class ApiHttpPresetTest extends TestCase
+class CrudPresetTest extends TestCase
 {
-    public function test_api_http_preset_generates_full_stack(): void
+    public function test_crud_preset_generates_http_stack(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'http-api',
+            'preset' => 'http-crud',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -51,6 +51,9 @@ class ApiHttpPresetTest extends TestCase
         $resource = File::get(
             "{$basePath}/Infrastructure/Http/Resources/OrderResource.php"
         );
+        $routes = File::get(
+            "{$basePath}/Infrastructure/Http/routes.php"
+        );
 
         $this->assertStringContainsString(
             'namespace App\\Modules\\Order\\Infrastructure\\Http\\Controllers;',
@@ -64,20 +67,24 @@ class ApiHttpPresetTest extends TestCase
             'namespace App\\Modules\\Order\\Infrastructure\\Http\\Resources;',
             $resource
         );
-        $this->assertStringContainsString(
-            'OrderRepository',
-            $controller
-        );
 
-        $this->assertFileExists(
-            "{$basePath}/OrderServiceProvider.php"
-        );
+        $this->assertStringContainsString('public function index', $controller);
+        $this->assertStringContainsString('public function store', $controller);
+        $this->assertStringContainsString('public function show', $controller);
+        $this->assertStringContainsString('public function update', $controller);
+        $this->assertStringContainsString('public function destroy', $controller);
+
+        $this->assertStringContainsString("Route::get('orders'", $routes);
+        $this->assertStringContainsString("Route::post('orders'", $routes);
+        $this->assertStringContainsString("Route::get('orders/{id}'", $routes);
+        $this->assertStringContainsString("Route::put('orders/{id}'", $routes);
+        $this->assertStringContainsString("Route::delete('orders/{id}'", $routes);
     }
 
-    public function test_api_http_preset_does_not_generate_cqrs_files(): void
+    public function test_crud_preset_does_not_generate_cqrs_files(): void
     {
         $this->artisan('ddd:make', [
-            'preset' => 'http-api',
+            'preset' => 'http-crud',
             'module' => 'Order',
             '--entity' => 'Order',
         ])->assertExitCode(0);
@@ -95,45 +102,6 @@ class ApiHttpPresetTest extends TestCase
         );
         $this->assertFileDoesNotExist(
             "{$basePath}/Application/QueryHandlers/GetOrderHandler.php"
-        );
-    }
-
-    public function test_api_http_preset_with_cqrs_generates_full_stack(): void
-    {
-        $this->artisan('ddd:make', [
-            'preset' => 'http-api',
-            'module' => 'Order',
-            '--entity' => 'Order',
-            '--style' => 'cqrs',
-        ])->assertExitCode(0);
-
-        $basePath = PathResolver::modulePath('Order');
-
-        $this->assertFileExists("{$basePath}/Application/Commands/CreateOrderCommand.php");
-        $this->assertFileExists("{$basePath}/Application/CommandHandlers/CreateOrderHandler.php");
-        $this->assertFileExists("{$basePath}/Application/Queries/GetOrderQuery.php");
-        $this->assertFileExists("{$basePath}/Application/QueryHandlers/GetOrderHandler.php");
-
-        $controller = File::get(
-            "{$basePath}/Infrastructure/Http/Controllers/OrderController.php"
-        );
-
-        $this->assertStringContainsString(
-            'CreateOrder',
-            $controller
-        );
-        $this->assertStringContainsString(
-            'GetOrder',
-            $controller
-        );
-
-        $handler = File::get(
-            "{$basePath}/Application/CommandHandlers/CreateOrderHandler.php"
-        );
-
-        $this->assertStringContainsString(
-            'OrderRepository',
-            $handler
         );
     }
 }

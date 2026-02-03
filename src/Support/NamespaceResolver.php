@@ -103,5 +103,20 @@ class NamespaceResolver
     {
         return self::module($module) . "\\Infrastructure\\Http\\Resources\\$resource";
     }
+
+    public static function httpControllerNamespace(string $module): string
+    {
+        return self::module($module) . "\\Infrastructure\\Http\\Controllers";
+    }
+
+    public static function httpRequestNamespace(string $module): string
+    {
+        return self::module($module) . "\\Infrastructure\\Http\\Requests";
+    }
+
+    public static function httpResourceNamespace(string $module): string
+    {
+        return self::module($module) . "\\Infrastructure\\Http\\Resources";
+    }
 }
 

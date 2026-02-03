@@ -64,7 +64,7 @@ final class ControllerGenerator
                     '{{ repository }}',
                 ],
                 [
-                    NamespaceResolver::httpController($module, $controller),
+                    NamespaceResolver::httpControllerNamespace($module),
                     $controller,
                     $entity,
                     NamespaceResolver::httpRequest($module, 'Store'.$entity.'Request'),
@@ -94,7 +94,7 @@ final class ControllerGenerator
                     '{{ repository }}',
                 ],
                 [
-                    NamespaceResolver::httpController($module, $controller),
+                    NamespaceResolver::httpControllerNamespace($module),
                     $controller,
                     $entity,
                     NamespaceResolver::httpRequest($module, 'Store'.$entity.'Request'),
@@ -126,7 +126,7 @@ final class ControllerGenerator
                 '{{ query }}',
             ],
             [
-                NamespaceResolver::httpController($module, $controller),
+                NamespaceResolver::httpControllerNamespace($module),
                 $controller,
                 $entity,
 

@@ -42,7 +42,7 @@ class RequestGenerator
                 '{{ request }}',
             ],
             [
-                NamespaceResolver::httpRequest($module, $request),
+                NamespaceResolver::httpRequestNamespace($module),
                 $request,
             ],
             file_get_contents(__DIR__.'/../../stubs/http/request.stub')
